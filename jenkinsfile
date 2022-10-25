@@ -30,7 +30,7 @@ pipeline {
             steps {
                 echo 'Deploy in Tomcat'
 		sh 'cd /opt/apache-tomcat-7.0.94/webapps/'
-		sh 'sudo wget --user admin --password admin123 http://44.202.234.72:8081/nexus/service/local/repositories/releases/content/com/web/cal/WebAppCal/1.4.5/WebAppCal-1.4.5.war'
+		sh 'sudo wget --user admin --password admin123 http://44.202.234.72:8081/nexus/service/local/repositories/releases/content/com/web/cal/WebAppCal/1.4.6/WebAppCal-1.4.6.war'
             }
 	}
     }
