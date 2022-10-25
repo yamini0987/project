@@ -2,20 +2,36 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('code validation') {
             steps {
-                echo 'Building..'
+                echo 'code validation'
+		sh 'mvn compile'
             }
         }
-        stage('Test') {
+        stage('Unit testing') {
             steps {
-                echo 'Testing..'
+                echo 'Unit Testing'
+		sh 'mvn test'
             }
         }
-        stage('Deploy') {
+        stage('sonar analysis') {
             steps {
-                echo 'Deploying....'
+                echo 'Performing sonar analysis'
+		sh 'mvn sonar:sonar -Dsonar.host.url=http://44.202.234.72:9000 -Dsonar.login=42490b7ecc51c5da1430abf6b9de2b22f31cbf39'
             }
-        }
+	}
+        stage('Publish Artifacts') {
+            steps {
+                echo 'Publishing Artifacts to Nexus'
+		sh 'mvn deploy'
+            }
+	}
+        stage('Deploying in tomcat') {
+            steps {
+                echo 'Deploy in Tomcat'
+		sh 'cd /opt/apache-tomcat-7.0.94/webapps/'
+		sh 'wget --user admin --password admin123 http://44.202.234.72:8081/nexus/service/local/repositories/releases/content/com/web/cal/WebAppCal/1.4.5/WebAppCal-1.4.5.war'
+            }
+	}
     }
 }
